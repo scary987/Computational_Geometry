@@ -135,6 +135,7 @@ if __name__ == '__main__':
     fastFail((Point(-1,-1),Point(-2,-2)),listofPoints)
     s1,s2 = tuple (random_points(2,500,500))
     fastFail((s1,s2),listofPoints )
+    fastFail((Point(602,600),Point(603,600)),listofPoints)
     #convexHull =GrahamScan(listofPoints)
     #sprint(len(listofPoints),len(convexHull))
 
