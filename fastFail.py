@@ -113,12 +113,12 @@ def fastFail(segment,listofPoints):
     s1,s2 = segment
     i = 0
     if doIntersect(convexHull[0],convexHull[-1],s1,s2):
-        print("Failed very fast:",-1)
+        print("Failed very fast:",0)
         return False
     while i< len(convexHull)-1:
         print(i)
         if doIntersect(convexHull[i],convexHull[i+1],s1,s2):
-            print("Failed fast:",i)
+            print("Failed fast:",i+1)
             return False
         i+=1
     print("Didn't Fail lmao")
