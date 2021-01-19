@@ -3,6 +3,24 @@ import random
 import math
 from fastFail import *
 import tripy
+import matplotlib.pyplot as plt
+
+#plt.scatter(3, 9, s=1000)
+
+    # Set chart title.
+plt.title("RandomNumbers", fontsize=19)
+
+    # Set x axis label.
+plt.xlabel("X", fontsize=10)
+
+    # Set y axis label.
+plt.ylabel("Y", fontsize=10)
+
+    # Set size of tick labels.
+plt.tick_params(axis='both', which='major', labelsize=9)
+
+    # Display the plot in the matplotlib's viewer.
+
 
 def tplToPoint(l):
     return Point(l[0],l[1])
@@ -18,9 +36,8 @@ def Area(polygon):
 def randomPointonTriangle( Triangle):
     r1 = random.random()
     r2 = random.random() 
-
-    vX = (1- math.sqrt(r1)*Triangle[0].x+(math.sqrt(1)*(1 - r2)*Triangle[1].x) + (r2*math.sqrt(r1)*Triangle[2].x))
-    vY = (1- math.sqrt(r1)*Triangle[0].y+(math.sqrt(1)*(1 - r2)*Triangle[1].y) + (r2*math.sqrt(r1)*Triangle[2].y))
+    vX = (1- math.sqrt(r1)*Triangle[0].x+(math.sqrt(r1)*(1 - r2)*Triangle[1].x) + (r2*math.sqrt(r1)*Triangle[2].x)) -1 #hear me out, these values are between 1<=2 without the -1 i dunno know why
+    vY = (1- math.sqrt(r1)*Triangle[0].y+(math.sqrt(r1)*(1 - r2)*Triangle[1].y) + (r2*math.sqrt(r1)*Triangle[2].y)) +1
     return Point(vX,vY)
 
 def PointOnPolygon(polygon1,point):
@@ -80,34 +97,51 @@ def MCI (M, Function):
     areaM = Area(M)
     Triangulation = [[tplToPoint(tpl) for tpl in triangle]for triangle in tripy.earclip(M)]
     print(Triangulation)
+    #exit()
     probs = []
-    probs = [Area(triangle)/areaM for triangle in Triangulation]
+    probs = [Area(triangle) for triangle in Triangulation]
+    areaM =sum(probs)
+    probs = [prob/areaM for prob in probs]
     for i in range(1,len(probs)):
         probs[i]+=probs[i-1]
-    
+    #actual area, as the loop above represents more of a work around a bug
+    areaM = Area(M)
     print(probs)
-
+    points  = []
     n = 1   #number of iterations
-    sum = 0 
+    sumM = 0 
     integral = 0
     lastintegral =-1
     while lastintegral!=integral and n<=10000 :
         randomNum = random.random()
         i = 0
-        while probs[i]<randomNum:
-            print(probs[i],randomNum)
-            i+=1
+        try:
+            
+            while probs[i]<randomNum:
+                print(probs[i],randomNum)
+                i+=1
+        except:
+            print(i,len(probs))
+            exit()
 
         print(len(probs),i)
         randomPoint = randomPointonTriangle(Triangulation[i])
+        points.append(randomPoint)
         if not PointOnPolygon(M.copy(),randomPoint):
             print("Falsely Generated Point")
-            continue
-        sum += Function(randomPoint)
+            if not PointOnPolygon(list(Triangulation[i].copy()),randomPoint):
+                print("point not on triangle eigher",randomPoint)
+                exit()
+                continue
+        
+        sumM += Function(randomPoint)
         lastintegral = integral
-        integral = areaM/n *sum
+        integral = areaM/n *sumM
         print(f"iteration: {n}: {integral}")
         n+=1
+
+    plt.scatter([p.x for p in points],[p.y for p in points])
+    plt.show()
 
 
 def EarCut(polygon):
@@ -168,16 +202,18 @@ if __name__ == "__main__":
     Christians Test
     """
 
-    polygon = [Point(0,0),Point(1,0),Point(1,1),Point(0,1)]
+    polygon = [Point(0,0),Point(2,0),Point(2,2),Point(0,2)]
     #MCI(polygon, lambda p:1)
     #MCI_christian(polygon, lambda p:1,mmax =2)
-    MCI(polygon, f2)
+    #MCI(polygon, f2)
+    #plt.show()
     #MCI_christian(polygon,f2, mmax =1 )
-    exit(0)
+    #exit(0)
 
     """
     My Tests
     """
 
-    listofPoints = random_points(1000,500,500,seed)
+    listofPoints = random_points(1000,500,500)
     convexHull = GrahamScan(listofPoints)
+    MCI(convexHull, f1)
