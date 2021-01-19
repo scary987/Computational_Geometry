@@ -1,5 +1,11 @@
 
 //https://de.wikipedia.org/wiki/Polygon#Fl%C3%A4cheninhalt
+
+
+Simple(polygon){
+
+
+}
 Area(polygon){
     n = width(polygon);
     sum = 0; i = 0;
@@ -17,7 +23,7 @@ randomPointonTriangle(polygon, Triangle){ //https://gamedev.stackexchange.com/qu
 
     //projecting the values to the triangle
     vX = (Triangle[2]-Triangle[0])*x;
-    vY =(Triangle[1]-Triangle[0])*x;
+    vY =(Triangle[1]-Triangle[0])*y;
     
     //return as point
     return [vX,vY];
@@ -49,11 +55,12 @@ MCI(M, Function){
         random = rand();
         i = 0;
         sumProbs =0;
-        while(sumProbs<random){ //random must be: random <= sumProbs --> probs[i]
+        while(sumProbs<random){ //random must be smaller: random <= sumProbs --> probs[i]
             sumProbs= sumProbs + probs[i];
             i=i+1;
 
         }
+        //Generate random Point on given Triangle, aber gleichverteilt
         randomPoint= randomPointonTriangle(Triangulation[i]);
         sum = sum + Function(randomPoint[0],randomPoint[1]);
         intergral = areaM/n * sum; //Intergralapproximation

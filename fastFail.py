@@ -69,7 +69,7 @@ def GrahamScan(listofPoints):
 if q lies on segment between p and r
 """
 
-#note: only works if given segments are already colinear, because this just checks the square
+#note: only works if given segments are already colinear, because this just checks the rectangle around the point
 def onSegment(p,q,r):
     if (q.x<=max(p.x,r.x) and q.x >= min(p.x, r.x) and q.y <= max(p.y,r.y) and q.y>=min(p.y,r.y)):
         return True
