@@ -50,7 +50,7 @@ MCI(M, Function){
     //main loop
     n = 1 ; // number of iterations
     sum= 0;
-    intergral = 0;
+    integral = 0;
     while(1){
         random = rand();
         i = 0;
@@ -63,7 +63,7 @@ MCI(M, Function){
         //Generate random Point on given Triangle, aber gleichverteilt
         randomPoint= randomPointonTriangle(Triangulation[i]);
         sum = sum + Function(randomPoint[0],randomPoint[1]);
-        intergral = areaM/n * sum; //Intergralapproximation
+        integral = areaM/n * sum; //Intergralapproximation
         n = n+1;
 
 
