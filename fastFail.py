@@ -69,7 +69,7 @@ def GrahamScan(listofPoints):
 if q lies on segment between p and r
 """
 
-#note: only works if give segments are already colinear, because this just checks the square
+#note: only works if given segments are already colinear, because this just checks the square
 def onSegment(p,q,r):
     if (q.x<=max(p.x,r.x) and q.x >= min(p.x, r.x) and q.y <= max(p.y,r.y) and q.y>=min(p.y,r.y)):
         return True
@@ -135,7 +135,7 @@ if __name__ == '__main__':
     fastFail((Point(-1,-1),Point(-2,-2)),listofPoints)
     s1,s2 = tuple (random_points(2,500,500))
     fastFail((s1,s2),listofPoints )
-    fastFail((Point(602,600),Point(603,600)),listofPoints)
+    #fastFail((Point(602,600),Point(603,600)),listofPoints)
     #convexHull =GrahamScan(listofPoints)
     #sprint(len(listofPoints),len(convexHull))
 
