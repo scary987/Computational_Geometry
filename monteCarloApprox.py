@@ -114,6 +114,7 @@ if __name__ == "__main__":
 
     polygon = [Point(0,0),Point(1,0),Point(1,1),Point(0,1)]
     MCI(polygon, lambda p:1)
+    MCI(polygon, f2)
     exit(0)
 
     """
