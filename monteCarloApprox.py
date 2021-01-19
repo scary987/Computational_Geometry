@@ -14,7 +14,7 @@ def Area(polygon):
     sum = sum + (polygon[-1].y+polygon[0].y)*(polygon[-1].x-polygon[0].x)
     return sum/2
 
-
+#generates a uniform random point in a Triangle 
 def randomPointonTriangle( Triangle):
     r1 = random.random()
     r2 = random.random() 
@@ -22,6 +22,59 @@ def randomPointonTriangle( Triangle):
     vX = (1- math.sqrt(r1)*Triangle[0].x+(math.sqrt(1)*(1 - r2)*Triangle[1].x) + (r2*math.sqrt(r1)*Triangle[2].x))
     vY = (1- math.sqrt(r1)*Triangle[0].y+(math.sqrt(1)*(1 - r2)*Triangle[1].y) + (r2*math.sqrt(r1)*Triangle[2].y))
     return Point(vX,vY)
+
+def PointOnPolygon(polygon1,point):
+    polygon = polygon1
+    last = polygon[-1]
+    current = polygon[0]
+    polygon.append(current)
+    polygon.pop(0)
+    trueIntersections = 0
+    while(polygon):
+        if last.y != current.y:
+            t = ((point.y-last.y)/(current.y-last.y))
+            if ((t==1) and (point.x <current.x) and ( (last.y-point.y)*(polygon[0].y-point.y) )<0):
+                trueIntersections +=1
+            if (0<t) and (t <1) and (point.x < t * current.x+ (1-t)*last.x):
+                trueIntersections +=1 
+        last = current
+        current = polygon[0]
+        polygon.pop(0)
+    # if cuts are odd, point lies on polygon
+    if trueIntersections%2 == 1:
+        print(f"{point} lies on polygon")
+        return True
+    return trueIntersections%2 == 1 
+
+#naive version of taking any point in 2d
+def generateRandomPoint(mmax=0):
+    vX = random.random()*math.inf
+    vY = random.random()*math.inf
+    if mmax:
+        vX = random.random()*mmax
+        vY = random.random()*mmax
+    signs = [-1,1]
+    return Point(vX*random.choice(signs),vY*random.choice(signs))
+
+def MCI_christian(M, Function,mmax= 0):
+    areaM = Area(M)
+    n = 1   #number of iterations
+    sum = 0 
+    integral = 0
+    lastintegral =-1
+    while lastintegral != integral and n<=10000: 
+        point =generateRandomPoint(mmax=mmax)
+        #print(f"in function: {polygon}")
+        if PointOnPolygon(M.copy(),point):
+            sum += Function(point)
+            lastintegral = integral
+            integral = areaM/n *sum
+            print(f"iteration: {n}: {integral}")
+            n+=1
+        else:
+            print(f"not on point {n}")
+
+
 
 def MCI (M, Function):
     areaM = Area(M)
@@ -38,7 +91,7 @@ def MCI (M, Function):
     sum = 0 
     integral = 0
     lastintegral =-1
-    while lastintegral!=integral:
+    while lastintegral!=integral and n<=10000 :
         randomNum = random.random()
         i = 0
         while probs[i]<randomNum:
@@ -47,6 +100,9 @@ def MCI (M, Function):
 
         print(len(probs),i)
         randomPoint = randomPointonTriangle(Triangulation[i])
+        if not PointOnPolygon(M.copy(),randomPoint):
+            print("Falsely Generated Point")
+            continue
         sum += Function(randomPoint)
         lastintegral = integral
         integral = areaM/n *sum
@@ -113,8 +169,10 @@ if __name__ == "__main__":
     """
 
     polygon = [Point(0,0),Point(1,0),Point(1,1),Point(0,1)]
-    MCI(polygon, lambda p:1)
+    #MCI(polygon, lambda p:1)
+    #MCI_christian(polygon, lambda p:1,mmax =2)
     MCI(polygon, f2)
+    #MCI_christian(polygon,f2, mmax =1 )
     exit(0)
 
     """
