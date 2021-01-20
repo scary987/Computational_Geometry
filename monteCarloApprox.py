@@ -35,9 +35,16 @@ def Area(polygon):
 #generates a uniform random point in a Triangle 
 def randomPointonTriangle( Triangle):
     r1 = random.random()
-    r2 = random.random() 
-    vX = (1- math.sqrt(r1)*Triangle[0].x+(math.sqrt(r1)*(1 - r2)*Triangle[1].x) + (r2*math.sqrt(r1)*Triangle[2].x)) -1 #hear me out, these values are between 1<=2 without the -1 i dunno know why
-    vY = (1- math.sqrt(r1)*Triangle[0].y+(math.sqrt(r1)*(1 - r2)*Triangle[1].y) + (r2*math.sqrt(r1)*Triangle[2].y)) +1
+    r2 = random.random()
+    while r1+r2 >1:
+        r1 = random.random()
+        r2 = random.random()
+    #vector u and v 
+    u =Point(Triangle[1].x-Triangle[0].x,Triangle[1].y-Triangle[0].y)
+    v =Point(Triangle[2].x-Triangle[0].x,Triangle[2].y-Triangle[0].y)
+    vX = u.x*r1+ v.x*r2
+    vY = u.y*r1 + v.y*r2
+    #vY *= -1
     return Point(vX,vY)
 
 def PointOnPolygon(polygon1,point):
@@ -79,7 +86,7 @@ def MCI_christian(M, Function,mmax= 0):
     sum = 0 
     integral = 0
     lastintegral =-1
-    while lastintegral != integral and n<=10000: 
+    while lastintegral != integral and n<=1000000: 
         point =generateRandomPoint(mmax=mmax)
         #print(f"in function: {polygon}")
         if PointOnPolygon(M.copy(),point):
@@ -127,13 +134,15 @@ def MCI (M, Function):
         print(len(probs),i)
         randomPoint = randomPointonTriangle(Triangulation[i])
         points.append(randomPoint)
-        if not PointOnPolygon(M.copy(),randomPoint):
+        #pure debugging purposes
+        
+        """if not PointOnPolygon(M.copy(),randomPoint):
             print("Falsely Generated Point")
             if not PointOnPolygon(list(Triangulation[i].copy()),randomPoint):
                 print("point not on triangle eigher",randomPoint)
                 exit()
-                continue
-        
+             continue
+        """
         sumM += Function(randomPoint)
         lastintegral = integral
         integral = areaM/n *sumM
@@ -141,7 +150,7 @@ def MCI (M, Function):
         n+=1
 
     plt.scatter([p.x for p in points],[p.y for p in points])
-    plt.show()
+    #plt.show()
 
 
 def EarCut(polygon):
@@ -195,14 +204,17 @@ def f1(P):
 
 def f2(P): # x^2 
     return P.x**2
+def f3(P):
+    return P.x
 
 if __name__ == "__main__":
 
     """
     Christians Test
     """
-
-    polygon = [Point(0,0),Point(2,0),Point(2,2),Point(0,2)]
+    #ax = plt.subplot(3,1,1)
+    #plt.plot()
+    polygon = [Point(0,0),Point(1,0),Point(1,1),Point(0,1)]
     #MCI(polygon, lambda p:1)
     #MCI_christian(polygon, lambda p:1,mmax =2)
     #MCI(polygon, f2)
@@ -213,7 +225,16 @@ if __name__ == "__main__":
     """
     My Tests
     """
-
-    listofPoints = random_points(1000,500,500)
+    #exit()
+    listofPoints = random_points(10000,500,500)
     convexHull = GrahamScan(listofPoints)
-    MCI(convexHull, f1)
+    ax = plt.subplot(2,1,1)
+    ax.scatter([p.x for p in convexHull],[p.y for p in convexHull], color='#33cc33')
+    ax.scatter([p.x for p in listofPoints],[p.y for p in listofPoints], color='#6699cc')
+    ax.scatter([p.x for p in convexHull],[p.y for p in convexHull], color='#33cc33')
+    ax.scatter(convexHull[0].x,convexHull[0].y, color='#0000ff')
+    plt.plot()
+    plt.subplot(2,1,2)
+    MCI(convexHull, f3)
+    plt.plot 
+    plt.show()

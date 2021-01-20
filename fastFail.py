@@ -24,8 +24,8 @@ def random_points(k, xMax, yMax,seed= 0):
 def getAngle(p1,p2):
     return math.atan2( (p2.y-p1.y),(p2.x-p1.x) )
 
-def isLeft(A,B, C):
-    return ( (B.x-A.x)*(C.y-A.y)-(C.x-A.x)*(B.y-A.y) > 0) #Helperfunction T(A,B,C) https://de.wikipedia.org/wiki/Graham_Scan#Vorbereitung
+def isLeft(A,B,C):
+    return ( (B.x-A.x)*(C.y-A.y)-(C.x-A.x)*(B.y-A.y)) > 0 #Helperfunction T(A,B,C) https://de.wikipedia.org/wiki/Graham_Scan#Vorbereitung
 
 
 def GrahamScan(listofPoints):
@@ -33,15 +33,19 @@ def GrahamScan(listofPoints):
     print(listofPoints,"before sorting")
     key_min = 0
     for i in range(len(listofPoints)):
-        if listofPoints[i].x < listofPoints[key_min].x:
+        if listofPoints[i].y  < listofPoints[key_min].y:
             key_min = i
-    listofPoints[0],listofPoints[key_min] = listofPoints[key_min],listofPoints[0] #this actually works(), was looking for a built in python, wow thanks https://www.geeksforgeeks.org/python-program-to-swap-two-elements-in-a-list/
-    
-    listofPoints[1:].sort(key=lambda p: getAngle(listofPoints[0],p)) #sort rest by angle compared to first value
-    print(listofPoints,"after sorting")
+    tmp = listofPoints[0]
+    listofPoints[0] = listofPoints[key_min]
+    listofPoints[key_min] = tmp
+    #listofPoints[0],listofPoints[key_min] = listofPoints[key_min],listofPoints[0] #this actually works(), was looking for a built in python, wow thanks https://www.geeksforgeeks.org/python-program-to-swap-two-elements-in-a-list/
+    tmp = listofPoints.pop(0)
+    listofPoints.sort(key=lambda p: getAngle(tmp,p)) #sort rest by angle compared to first value
+    print(tmp,listofPoints,"after sorting")
 
     stack = []
-    stack.extend(listofPoints[:2])
+    stack.append(tmp)
+    stack.append(listofPoints[0])
     i = len(stack)
     print(i,stack)
 
