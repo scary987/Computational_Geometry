@@ -24,6 +24,8 @@ plt.tick_params(axis='both', which='major', labelsize=9)
 
 def tplToPoint(l):
     return Point(l[0],l[1])
+
+
 def Area(polygon):
     sum = 0
     for i in range(len(polygon)-1):
@@ -86,7 +88,8 @@ def MCI_christian(M, Function,mmax= 0):
     sum = 0 
     integral = 0
     lastintegral =-1
-    while lastintegral != integral and n<=1000000: 
+    points = []
+    while lastintegral != integral and n<=100000: 
         point =generateRandomPoint(mmax=mmax)
         #print(f"in function: {polygon}")
         if PointOnPolygon(M.copy(),point):
@@ -95,15 +98,18 @@ def MCI_christian(M, Function,mmax= 0):
             integral = areaM/n *sum
             print(f"iteration: {n}: {integral}")
             n+=1
+            points.append(point)
         else:
             print(f"not on point {n}")
+    
+    return integral
 
 
 
 def MCI (M, Function):
     areaM = Area(M)
     Triangulation = [[tplToPoint(tpl) for tpl in triangle]for triangle in tripy.earclip(M)]
-    print(Triangulation)
+    #print(Triangulation)
     #exit()
     probs = []
     probs = [Area(triangle) for triangle in Triangulation]
@@ -119,7 +125,7 @@ def MCI (M, Function):
     sumM = 0 
     integral = 0
     lastintegral =-1
-    while lastintegral!=integral and n<=10000 :
+    while lastintegral!=integral and n<=100000 :
         randomNum = random.random()
         i = 0
         try:
@@ -149,9 +155,11 @@ def MCI (M, Function):
         print(f"iteration: {n}: {integral}")
         n+=1
 
-    plt.scatter([p.x for p in points],[p.y for p in points])
+    #plt.scatter([p.x for p in points],[p.y for p in points])
     #plt.show()
+    return integral
 
+#does not work properly, replaced by external implementation
 
 def EarCut(polygon):
     triangulation = [polygon]
@@ -215,8 +223,9 @@ if __name__ == "__main__":
     #ax = plt.subplot(3,1,1)
     #plt.plot()
     polygon = [Point(0,0),Point(1,0),Point(1,1),Point(0,1)]
-    #MCI(polygon, lambda p:1)
-    #MCI_christian(polygon, lambda p:1,mmax =2)
+    meins = MCI(polygon, f2)          #width of the square 
+    seins = MCI_christian(polygon, f2,mmax =1.5)
+    print(meins,seins)
     #MCI(polygon, f2)
     #plt.show()
     #MCI_christian(polygon,f2, mmax =1 )
@@ -225,8 +234,8 @@ if __name__ == "__main__":
     """
     My Tests
     """
-    #exit()
-    listofPoints = random_points(10000,500,500)
+    exit()
+    listofPoints = random_points(100000,500,500)
     convexHull = GrahamScan(listofPoints)
     ax = plt.subplot(2,1,1)
     ax.scatter([p.x for p in convexHull],[p.y for p in convexHull], color='#33cc33')
