@@ -234,16 +234,16 @@ if __name__ == "__main__":
     """
     My Tests
     """
-    exit()
-    listofPoints = random_points(100000,500,500)
+    #exit()
+    listofPoints = random_points(1000,50000,50000)
     convexHull = GrahamScan(listofPoints)
     ax = plt.subplot(2,1,1)
     ax.scatter([p.x for p in convexHull],[p.y for p in convexHull], color='#33cc33')
     ax.scatter([p.x for p in listofPoints],[p.y for p in listofPoints], color='#6699cc')
     ax.scatter([p.x for p in convexHull],[p.y for p in convexHull], color='#33cc33')
     ax.scatter(convexHull[0].x,convexHull[0].y, color='#0000ff')
-    plt.plot()
-    plt.subplot(2,1,2)
-    MCI(convexHull, f3)
-    plt.plot 
+    #plt.plot()
+    #plt.subplot(2,1,2)
+    #MCI(convexHull, f3)
+    #plt.plot 
     plt.show()

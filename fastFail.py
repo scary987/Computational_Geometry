@@ -15,7 +15,7 @@ def random_points(k, xMax, yMax,seed= 0):
         x= random.random()*xMax
         if random.randint(0,1)==1:
             x*=-1
-        y = random.random()*yMax
+        y = random.random()*yMax # y = random.random()* (r-x)
         if random.randint(0,1)==1:
             y*=-1
         l.append(Point(x,y))
@@ -25,7 +25,7 @@ def getAngle(p1,p2):
     return math.atan2( (p2.y-p1.y),(p2.x-p1.x) )
 
 def isLeft(A,B,C):
-    return ( (B.x-A.x)*(C.y-A.y)-(C.x-A.x)*(B.y-A.y)) > 0 #Helperfunction T(A,B,C) https://de.wikipedia.org/wiki/Graham_Scan#Vorbereitung
+    return ( (B.x-A.x)*(C.y-A.y)-(C.x-A.x)*(B.y-A.y)) > 0 #Helperfunction T(A,B,C) ttps://de.wikipedia.org/wiki/Graham_Scan#Vorbereitung
 
 
 def GrahamScan(listofPoints):
@@ -135,7 +135,7 @@ def fastFail(segment,listofPoints):
 
 if __name__ == '__main__':
     seed = random.randint(1,10000000000000000000)
-    listofPoints = random_points(1000,500,500,seed)
+    listofPoints = random_points(10,50000,50000,seed)
     fastFail((Point(-1,-1),Point(-2,-2)),listofPoints)
     s1,s2 = tuple (random_points(2,500,500))
     fastFail((s1,s2),listofPoints )
